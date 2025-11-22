@@ -3,7 +3,7 @@ let countdownInterval;
 let clockInterval;
 let currentArrivals = [];
 let settings = {
-    stopId: CONFIG.STOP_ID, // Hard-coded to 9758 (Eastbound)
+    stopId: (window.ENV && window.ENV.STOP_ID) || '9758', // Hard-coded to 9758 (Eastbound)
     appId: ''
 };
 
@@ -46,8 +46,8 @@ async function initializeWeather() {
         const lon = -122.6784;
 
         // Try OpenWeatherMap if API key is configured
-        if (CONFIG.WEATHER_API_KEY && CONFIG.WEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${CONFIG.WEATHER_API_KEY}`;
+        if (window.ENV && window.ENV.WEATHER_API_KEY && window.ENV.WEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${window.ENV.WEATHER_API_KEY}`;
             const response = await fetch(url);
             const data = await response.json();
 
@@ -109,11 +109,11 @@ function updateWeather(temp, description) {
 }
 
 function loadSettings() {
-    // Check if API key is configured in config.js
-    if (CONFIG.TRIMET_API_KEY && CONFIG.TRIMET_API_KEY !== 'YOUR_API_KEY_HERE') {
-        console.log('✅ Using API key from config.js');
-        settings.appId = CONFIG.TRIMET_API_KEY;
-        settings.stopId = CONFIG.STOP_ID;
+    // Check if API key is configured in .env.js
+    if (window.ENV && window.ENV.TRIMET_API_KEY && window.ENV.TRIMET_API_KEY !== 'YOUR_API_KEY_HERE') {
+        console.log('✅ Using API key from .env.js');
+        settings.appId = window.ENV.TRIMET_API_KEY;
+        settings.stopId = window.ENV.STOP_ID || '9758';
 
         // Auto-start the app
         document.getElementById('configSection').style.display = 'none';
@@ -128,7 +128,7 @@ function loadSettings() {
         const saved = JSON.parse(savedSettings);
         if (saved.appId) {
             settings.appId = saved.appId;
-            settings.stopId = CONFIG.STOP_ID; // Always use hard-coded stop ID
+            settings.stopId = (window.ENV && window.ENV.STOP_ID) || '9758'; // Always use hard-coded stop ID
             console.log('✅ Loaded API key from localStorage');
 
             document.getElementById('configSection').style.display = 'none';
@@ -139,7 +139,7 @@ function loadSettings() {
     }
 
     // No API key found - show config screen
-    console.log('ℹ️ No API key found. Please configure in config.js or enter manually.');
+    console.log('ℹ️ No API key found. Please configure in .env.js or enter manually.');
     document.getElementById('configSection').style.display = 'block';
     document.getElementById('arrivalsSection').style.display = 'none';
 }
@@ -153,7 +153,7 @@ function saveSettings() {
     }
 
     settings.appId = appId;
-    settings.stopId = CONFIG.STOP_ID; // Always use hard-coded stop ID
+    settings.stopId = (window.ENV && window.ENV.STOP_ID) || '9758'; // Always use hard-coded stop ID
     localStorage.setItem('trimetSettings', JSON.stringify(settings));
 
     console.log('✅ Settings saved:', settings);
@@ -250,10 +250,24 @@ function displayArrivals(resultSet) {
     console.log('🔍 All arrivals:', resultSet.arrival);
 
     // Filter for MAX trains only and sort by estimated time
+    // TriMet MAX route IDs: 90 (Red), 100 (Blue), 190 (Yellow), 200 (Green), 290 (Orange)
+    const MAX_ROUTE_IDS = [90, 100, 190, 200, 290];
+
     currentArrivals = resultSet.arrival
         .filter(a => {
-            const isMax = a.route && a.route.toString().includes('MAX');
-            console.log(`Route ${a.route}: ${isMax ? '✅ MAX' : '❌ Not MAX'}`);
+            // Check if route ID is a MAX line
+            const routeId = parseInt(a.route);
+            const isMaxById = MAX_ROUTE_IDS.includes(routeId);
+
+            // Also check if shortSign, fullSign, or desc contains "MAX"
+            const hasMaxInName = (
+                (a.shortSign && a.shortSign.toUpperCase().includes('MAX')) ||
+                (a.fullSign && a.fullSign.toUpperCase().includes('MAX')) ||
+                (a.desc && a.desc.toUpperCase().includes('MAX'))
+            );
+
+            const isMax = isMaxById || hasMaxInName;
+            console.log(`Route ${a.route} (${a.shortSign || a.desc}): ${isMax ? '✅ MAX' : '❌ Not MAX'}`);
             return isMax;
         })
         .sort((a, b) => {

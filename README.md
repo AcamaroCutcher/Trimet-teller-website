@@ -26,15 +26,15 @@ Perfect for wall-mounted displays with live countdown timers, current time, and 
 
 ### 2. Configure Your API Key
 
-**Option A: Edit config.js (Recommended for Always-On Display)**
+**Option A: Edit .env.js (Recommended for Always-On Display)**
 
-Open `config.js` and replace `YOUR_API_KEY_HERE` with your actual TriMet API key:
+Open `.env.js` and replace `YOUR_API_KEY_HERE` with your actual TriMet API key:
 
 ```javascript
-const CONFIG = {
-    TRIMET_API_KEY: 'YOUR_TRIMET_API_KEY_HERE',  // ← Put your key here
-    STOP_ID: '9758', // Providence Park MAX Station - Eastbound
-    WEATHER_API_KEY: 'YOUR_OPENWEATHER_API_KEY_HERE' // Optional
+window.ENV = {
+    TRIMET_API_KEY: 'YOUR_API_KEY_HERE',  // ← Put your key here
+    STOP_ID: '9758',  // Providence Park Station - Eastbound
+    WEATHER_API_KEY: 'YOUR_OPENWEATHER_API_KEY_HERE'  // Optional
 };
 ```
 
@@ -42,7 +42,7 @@ The app will auto-start when you open it!
 
 **Option B: Enter Manually (One-Time Setup)**
 
-If you don't edit config.js, you'll see a configuration screen where you can enter your API key. It will be saved in your browser.
+If you don't edit .env.js, you'll see a configuration screen where you can enter your API key. It will be saved in your browser.
 
 ### 3. Run the Website
 
@@ -72,7 +72,7 @@ ifconfig | grep "inet " | grep -v 127.0.0.1
 The app uses a free weather API by default (Open-Meteo - no key needed). For more detailed weather, you can optionally add an OpenWeatherMap API key:
 
 1. Get a free API key from [https://openweathermap.org/api](https://openweathermap.org/api)
-2. Add it to `config.js`:
+2. Add it to `.env.js`:
    ```javascript
    WEATHER_API_KEY: 'your_openweather_key_here'
    ```
@@ -144,7 +144,7 @@ The container:
 
 **No trains showing?**
 - Check browser console (F12) for detailed error messages
-- Verify your TriMet API key is correct in `config.js`
+- Verify your TriMet API key is correct in `.env.js`
 - Make sure you're connected to the internet
 
 **Weather not loading?**
@@ -161,7 +161,7 @@ The container:
 ├── index.html       # Main webpage
 ├── style.css        # Beautiful styling with train theme
 ├── app.js          # All functionality (trains, time, weather)
-├── config.js       # Your API keys (edit this!)
+├── .env.js         # Your API keys (edit this!)
 ├── Dockerfile      # Docker container setup
 ├── docker-compose.yml
 └── README.md       # This file
