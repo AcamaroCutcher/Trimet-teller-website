@@ -30,9 +30,48 @@ The application is pre-configured with two platform options:
 
 Simply select your preferred direction when setting up the app.
 
-### 3. Run Locally
+### 3. Run with Docker (Recommended for Always-On Display)
 
-Simply open `index.html` in your web browser:
+The easiest way to keep the website running continuously is using Docker:
+
+```bash
+# Build and start the container
+docker-compose up -d
+
+# The website will be available at http://localhost:8080
+```
+
+To manage the Docker container:
+
+```bash
+# Stop the container
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Restart the container
+docker-compose restart
+
+# Rebuild after changes
+docker-compose up -d --build
+```
+
+**Benefits of Docker deployment:**
+- ✅ Always running (auto-restarts on failure)
+- ✅ Runs in background
+- ✅ Lightweight nginx server
+- ✅ Starts automatically on system reboot
+- ✅ Easy to manage and update
+
+**Access on your iPad:**
+- If running on the same machine: `http://localhost:8080`
+- If running on another computer: `http://YOUR_COMPUTER_IP:8080`
+  - Find your computer's IP with: `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
+
+### 4. Run Locally (Alternative)
+
+If you don't want to use Docker, you can run it directly:
 
 ```bash
 # Option 1: Open directly (may have CORS issues with some browsers)
@@ -47,14 +86,15 @@ npx http-server -p 8000
 # Then visit http://localhost:8000
 ```
 
-### 4. Configure on iPad
+### 5. Configure on iPad
 
 1. Open the website on your iPad
-2. Enter your Stop ID and TriMet App ID
-3. Tap "Save & Start"
-4. The app will remember your settings
+2. Select your preferred direction (Eastbound or Westbound)
+3. Enter your TriMet App ID
+4. Tap "Save & Start"
+5. The app will remember your settings
 
-### 5. iPad Wall-Mount Setup
+### 6. iPad Wall-Mount Setup
 
 For best results on a wall-mounted iPad:
 

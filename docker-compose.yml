@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  trimet-display:
+    build: .
+    container_name: trimet-max-arrivals
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    labels:
+      - "description=TriMet MAX Arrivals Display for 1615 SW Morrison St"
