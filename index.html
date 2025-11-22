@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TriMet MAX Arrivals</title>
+    <title>TriMet MAX Arrivals - 1615 SW Morrison St</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="background-overlay"></div>
+
     <div class="container">
         <header>
+            <div class="header-top">
+                <div class="datetime-weather">
+                    <div class="current-time" id="currentTime">--:--</div>
+                    <div class="current-date" id="currentDate">Loading...</div>
+                </div>
+                <div class="weather-widget" id="weatherWidget">
+                    <div class="weather-temp">--°</div>
+                    <div class="weather-desc">Loading...</div>
+                </div>
+            </div>
+
             <h1>🚊 TriMet MAX Arrivals</h1>
-            <p class="address">1615 SW Morrison St, Portland, OR 97205</p>
+            <p class="address">1615 SW Morrison St • Providence Park Station</p>
+            <p class="direction-badge">Eastbound → City Center / Gresham</p>
         </header>
 
-        <div class="config-section" id="configSection">
-            <div class="input-group">
-                <label for="stopId">Providence Park MAX Station:</label>
-                <select id="stopId">
-                    <option value="9758">Eastbound (to City Center/Gresham)</option>
-                    <option value="9757">Westbound (to Hillsboro/Beaverton)</option>
-                </select>
-            </div>
+        <div class="config-section" id="configSection" style="display: none;">
             <div class="input-group">
                 <label for="appId">TriMet App ID:</label>
                 <input type="text" id="appId" placeholder="Enter your TriMet API App ID">
@@ -28,14 +35,14 @@
             <button id="saveBtn" onclick="saveSettings()">Save & Start</button>
             <p class="help-text">
                 Get your free API App ID at <a href="https://developer.trimet.org/" target="_blank">developer.trimet.org</a><br>
-                Providence Park MAX Station is located at SW 17th & Morrison (1 min walk)
+                Or edit config.js to set your API key permanently
             </p>
         </div>
 
-        <div class="arrivals-section" id="arrivalsSection" style="display: none;">
-            <div class="stop-info">
-                <h2 id="stopName">Loading...</h2>
-                <button class="settings-btn" onclick="showSettings()">⚙️ Settings</button>
+        <div class="arrivals-section" id="arrivalsSection">
+            <div class="section-header">
+                <h2>Next Trains</h2>
+                <button class="settings-btn" onclick="showSettings()">⚙️</button>
             </div>
 
             <div id="arrivals" class="arrivals-list">
@@ -50,6 +57,7 @@
         <div class="error-message" id="errorMessage" style="display: none;"></div>
     </div>
 
+    <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

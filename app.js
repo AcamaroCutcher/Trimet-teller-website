@@ -1,41 +1,159 @@
 let refreshInterval;
 let countdownInterval;
+let clockInterval;
 let currentArrivals = [];
 let settings = {
-    stopId: '',
+    stopId: CONFIG.STOP_ID, // Hard-coded to 9758 (Eastbound)
     appId: ''
 };
 
-// Load settings on page load
+// Load settings and start on page load
 document.addEventListener('DOMContentLoaded', () => {
+    initializeClock();
+    initializeWeather();
     loadSettings();
 });
 
-function loadSettings() {
-    const savedSettings = localStorage.getItem('trimetSettings');
-    if (savedSettings) {
-        settings = JSON.parse(savedSettings);
-        if (settings.stopId && settings.appId) {
-            console.log('✅ Loaded saved settings:', settings);
-            document.getElementById('configSection').style.display = 'none';
-            document.getElementById('arrivalsSection').style.display = 'block';
-            startTracking();
+function initializeClock() {
+    updateClock();
+    clockInterval = setInterval(updateClock, 1000);
+}
+
+function updateClock() {
+    const now = new Date();
+
+    // Update time
+    const timeString = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    document.getElementById('currentTime').textContent = timeString;
+
+    // Update date
+    const dateString = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+    });
+    document.getElementById('currentDate').textContent = dateString;
+}
+
+async function initializeWeather() {
+    try {
+        // Portland, OR coordinates
+        const lat = 45.5152;
+        const lon = -122.6784;
+
+        // Try OpenWeatherMap if API key is configured
+        if (CONFIG.WEATHER_API_KEY && CONFIG.WEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${CONFIG.WEATHER_API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.main && data.weather) {
+                const temp = Math.round(data.main.temp);
+                const desc = data.weather[0].description;
+                updateWeather(temp, desc);
+                console.log('✅ Weather loaded from OpenWeatherMap');
+                return;
+            }
         }
-    } else {
-        console.log('ℹ️ No saved settings found');
+
+        // Fallback: use free weather API (no key required)
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America/Los_Angeles`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.current) {
+            const temp = Math.round(data.current.temperature_2m);
+            const weatherCode = data.current.weather_code;
+            const desc = getWeatherDescription(weatherCode);
+            updateWeather(temp, desc);
+            console.log('✅ Weather loaded from Open-Meteo');
+        }
+    } catch (error) {
+        console.error('⚠️ Weather fetch failed:', error);
+        updateWeather('--', 'Portland, OR');
     }
 }
 
-function saveSettings() {
-    const stopId = document.getElementById('stopId').value.trim();
-    const appId = document.getElementById('appId').value.trim();
+function getWeatherDescription(code) {
+    const weatherCodes = {
+        0: 'Clear',
+        1: 'Mainly Clear',
+        2: 'Partly Cloudy',
+        3: 'Overcast',
+        45: 'Foggy',
+        48: 'Foggy',
+        51: 'Light Drizzle',
+        53: 'Drizzle',
+        55: 'Heavy Drizzle',
+        61: 'Light Rain',
+        63: 'Rain',
+        65: 'Heavy Rain',
+        71: 'Light Snow',
+        73: 'Snow',
+        75: 'Heavy Snow',
+        80: 'Light Showers',
+        81: 'Showers',
+        82: 'Heavy Showers',
+        95: 'Thunderstorm'
+    };
+    return weatherCodes[code] || 'Portland';
+}
 
-    if (!stopId || !appId) {
-        showError('Please select direction and enter App ID');
+function updateWeather(temp, description) {
+    document.querySelector('.weather-temp').textContent = `${temp}°`;
+    document.querySelector('.weather-desc').textContent = description;
+}
+
+function loadSettings() {
+    // Check if API key is configured in config.js
+    if (CONFIG.TRIMET_API_KEY && CONFIG.TRIMET_API_KEY !== 'YOUR_API_KEY_HERE') {
+        console.log('✅ Using API key from config.js');
+        settings.appId = CONFIG.TRIMET_API_KEY;
+        settings.stopId = CONFIG.STOP_ID;
+
+        // Auto-start the app
+        document.getElementById('configSection').style.display = 'none';
+        document.getElementById('arrivalsSection').style.display = 'block';
+        startTracking();
         return;
     }
 
-    settings = { stopId, appId };
+    // Otherwise check localStorage
+    const savedSettings = localStorage.getItem('trimetSettings');
+    if (savedSettings) {
+        const saved = JSON.parse(savedSettings);
+        if (saved.appId) {
+            settings.appId = saved.appId;
+            settings.stopId = CONFIG.STOP_ID; // Always use hard-coded stop ID
+            console.log('✅ Loaded API key from localStorage');
+
+            document.getElementById('configSection').style.display = 'none';
+            document.getElementById('arrivalsSection').style.display = 'block';
+            startTracking();
+            return;
+        }
+    }
+
+    // No API key found - show config screen
+    console.log('ℹ️ No API key found. Please configure in config.js or enter manually.');
+    document.getElementById('configSection').style.display = 'block';
+    document.getElementById('arrivalsSection').style.display = 'none';
+}
+
+function saveSettings() {
+    const appId = document.getElementById('appId').value.trim();
+
+    if (!appId) {
+        showError('Please enter your TriMet App ID');
+        return;
+    }
+
+    settings.appId = appId;
+    settings.stopId = CONFIG.STOP_ID; // Always use hard-coded stop ID
     localStorage.setItem('trimetSettings', JSON.stringify(settings));
 
     console.log('✅ Settings saved:', settings);
@@ -54,15 +172,14 @@ function showSettings() {
         clearInterval(countdownInterval);
     }
 
-    document.getElementById('stopId').value = settings.stopId;
-    document.getElementById('appId').value = settings.appId;
+    document.getElementById('appId').value = settings.appId || '';
 
     document.getElementById('arrivalsSection').style.display = 'none';
     document.getElementById('configSection').style.display = 'block';
 }
 
 function startTracking() {
-    console.log('🚀 Starting arrival tracking...');
+    console.log('🚀 Starting arrival tracking for Stop ID:', settings.stopId);
     fetchArrivals();
     // Refresh data every 30 seconds
     refreshInterval = setInterval(fetchArrivals, 30000);
@@ -118,15 +235,8 @@ async function fetchArrivals() {
 
 function displayArrivals(resultSet) {
     const arrivalsDiv = document.getElementById('arrivals');
-    const stopNameEl = document.getElementById('stopName');
 
     console.log('🚏 Processing arrivals for stop:', resultSet.location);
-
-    // Update stop name
-    if (resultSet.location && resultSet.location.length > 0) {
-        stopNameEl.textContent = resultSet.location[0].desc || 'Stop ' + settings.stopId;
-        console.log('📍 Stop name:', stopNameEl.textContent);
-    }
 
     // Check if there are arrivals
     if (!resultSet.arrival || resultSet.arrival.length === 0) {

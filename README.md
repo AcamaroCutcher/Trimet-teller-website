@@ -1,154 +1,192 @@
 # TriMet MAX Arrival Display
 
-A clean, iPad-optimized web application for displaying real-time TriMet MAX train arrivals at **1615 SW Morrison St, Portland, OR 97205**. Perfect for wall-mounted displays.
+A beautiful, iPad-optimized web application for displaying real-time TriMet MAX train arrivals at **1615 SW Morrison St, Portland, OR 97205** (Providence Park Station - Eastbound).
 
-## Features
+Perfect for wall-mounted displays with live countdown timers, current time, and Portland weather!
 
-- Real-time MAX train arrival times
-- Auto-refresh every 30 seconds
-- Large, readable text optimized for wall-mounted iPads
-- Dark theme for better visibility
-- Wake lock to prevent iPad from sleeping
-- Shows next 5 upcoming MAX trains
-- Color-coded arrival times (red for NOW, yellow for <5 min)
+## ✨ Features
 
-## Setup Instructions
+- 🚊 Real-time MAX train arrivals with live countdown
+- ⏰ Current time display (updates every second)
+- 🌤️ Portland weather (temperature and conditions)
+- 🎨 Beautiful train-themed background
+- 📱 iPad-optimized interface
+- 🔒 Wake lock to prevent screen sleep
+- 🎯 Hard-coded for Providence Park Station Eastbound (Stop ID 9758)
+- 🔄 Auto-refresh every 30 seconds
+- 💾 Config file for API key (no manual entry needed)
 
-### 1. Get a TriMet API App ID
+## 🚀 Quick Setup
+
+### 1. Get Your TriMet API Key
 
 1. Visit [https://developer.trimet.org/](https://developer.trimet.org/)
 2. Register for a free account
 3. Create a new application to get your App ID
 
-### 2. Your Stop Information
+### 2. Configure Your API Key
 
-**Providence Park MAX Station** (1 minute walk from 1615 SW Morrison St)
+**Option A: Edit config.js (Recommended for Always-On Display)**
 
-The application is pre-configured with two platform options:
-- **Stop ID 9758** - Eastbound platform (towards City Center/Gresham)
-- **Stop ID 9757** - Westbound platform (towards Hillsboro/Beaverton)
+Open `config.js` and replace `YOUR_API_KEY_HERE` with your actual TriMet API key:
 
-Simply select your preferred direction when setting up the app.
-
-### 3. Run with Docker (Recommended for Always-On Display)
-
-The easiest way to keep the website running continuously is using Docker:
-
-```bash
-# Build and start the container
-docker-compose up -d
-
-# The website will be available at http://localhost:8080
+```javascript
+const CONFIG = {
+    TRIMET_API_KEY: 'YOUR_TRIMET_API_KEY_HERE',  // ← Put your key here
+    STOP_ID: '9758', // Providence Park MAX Station - Eastbound
+    WEATHER_API_KEY: 'YOUR_OPENWEATHER_API_KEY_HERE' // Optional
+};
 ```
 
-To manage the Docker container:
+The app will auto-start when you open it!
+
+**Option B: Enter Manually (One-Time Setup)**
+
+If you don't edit config.js, you'll see a configuration screen where you can enter your API key. It will be saved in your browser.
+
+### 3. Run the Website
+
+**Using Python (Simplest):**
+```bash
+cd Trimet-teller-website
+python3 -m http.server 8080
+```
+
+**Using Docker (Best for Always-On):**
+```bash
+docker-compose up -d
+```
+
+### 4. Access on Your iPad
+
+- **On same computer**: Open `http://localhost:8080`
+- **On iPad**: Find your computer's IP address and open `http://YOUR_IP:8080`
+
+To find your IP:
+```bash
+ifconfig | grep "inet " | grep -v 127.0.0.1
+```
+
+## 🌤️ Optional: Add Weather (Free)
+
+The app uses a free weather API by default (Open-Meteo - no key needed). For more detailed weather, you can optionally add an OpenWeatherMap API key:
+
+1. Get a free API key from [https://openweathermap.org/api](https://openweathermap.org/api)
+2. Add it to `config.js`:
+   ```javascript
+   WEATHER_API_KEY: 'your_openweather_key_here'
+   ```
+
+Without this, weather still works using the free Open-Meteo API!
+
+## 📱 iPad Wall-Mount Setup
+
+For the best wall-mounted iPad experience:
+
+### 1. Enable Guided Access (Lock to This App)
+- Go to Settings > Accessibility > Guided Access
+- Turn it on and set a passcode
+- Open your website in Safari
+- Triple-click the home/power button
+- Tap "Start" to lock into the app
+
+### 2. Prevent Auto-Lock
+- Go to Settings > Display & Brightness > Auto-Lock
+- Set to "Never"
+
+### 3. Keep iPad Charged
+- Keep the iPad plugged in continuously
+- The app includes wake lock to prevent sleep
+
+## 🎨 What You'll See
+
+- **Top Left**: Current time and date
+- **Top Right**: Portland weather
+- **Center**: TriMet MAX Arrivals header with your address
+- **Main Area**: Next 5 MAX trains with live countdown timers
+  - Green: Trains arriving in 5+ minutes
+  - Yellow: Trains arriving in 2-5 minutes (⚠️ Soon!)
+  - Red (pulsing): Trains arriving in <2 minutes or at station
+
+## 🔧 Technical Details
+
+- **Stop ID**: 9758 (Providence Park Station - Eastbound to City Center/Gresham)
+- **Refresh Rate**: Train data updates every 30 seconds
+- **Countdown**: Updates every second for live countdown
+- **Weather**: Updates on page load (manual refresh to update)
+- **Clock**: Updates every second
+
+## 🐳 Docker Deployment
+
+For always-on deployment:
 
 ```bash
-# Stop the container
+# Start container
+docker-compose up -d
+
+# Stop container
 docker-compose down
 
 # View logs
 docker-compose logs -f
 
-# Restart the container
-docker-compose restart
-
 # Rebuild after changes
 docker-compose up -d --build
 ```
 
-**Benefits of Docker deployment:**
-- ✅ Always running (auto-restarts on failure)
-- ✅ Runs in background
-- ✅ Lightweight nginx server
-- ✅ Starts automatically on system reboot
-- ✅ Easy to manage and update
+The container:
+- Runs on port 8080
+- Auto-restarts on failure
+- Starts on system boot
+- Uses lightweight nginx server
 
-**Access on your iPad:**
-- If running on the same machine: `http://localhost:8080`
-- If running on another computer: `http://YOUR_COMPUTER_IP:8080`
-  - Find your computer's IP with: `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
+## 🐛 Troubleshooting
 
-### 4. Run Locally (Alternative)
+**No trains showing?**
+- Check browser console (F12) for detailed error messages
+- Verify your TriMet API key is correct in `config.js`
+- Make sure you're connected to the internet
 
-If you don't want to use Docker, you can run it directly:
+**Weather not loading?**
+- Weather uses a free API by default - should work without configuration
+- Check browser console for errors
 
-```bash
-# Option 1: Open directly (may have CORS issues with some browsers)
-open index.html
+**Time/Date wrong?**
+- Uses your device's timezone automatically
+- Check your iPad's time settings
 
-# Option 2: Use Python's built-in server (recommended)
-python3 -m http.server 8000
-# Then visit http://localhost:8000
+## 📁 Project Structure
 
-# Option 3: Use Node.js http-server
-npx http-server -p 8000
-# Then visit http://localhost:8000
+```
+├── index.html       # Main webpage
+├── style.css        # Beautiful styling with train theme
+├── app.js          # All functionality (trains, time, weather)
+├── config.js       # Your API keys (edit this!)
+├── Dockerfile      # Docker container setup
+├── docker-compose.yml
+└── README.md       # This file
 ```
 
-### 5. Configure on iPad
+## 💡 Tips
 
-1. Open the website on your iPad
-2. Select your preferred direction (Eastbound or Westbound)
-3. Enter your TriMet App ID
-4. Tap "Save & Start"
-5. The app will remember your settings
+- The app automatically filters for MAX trains only
+- Countdown shows MM:SS format for trains <10 minutes away
+- Countdown shows seconds only for trains <2 minutes away
+- The display works great on iPads 9.7" and larger
+- For best results, use landscape orientation
 
-### 6. iPad Wall-Mount Setup
+## 🔒 Privacy
 
-For best results on a wall-mounted iPad:
+- All settings stored locally in your browser
+- No data sent anywhere except:
+  - TriMet API (for train arrivals)
+  - Weather API (for Portland weather)
+- Your API keys never leave your device
 
-1. **Enable Guided Access** (prevents accidental exits):
-   - Go to Settings > Accessibility > Guided Access
-   - Turn it on and set a passcode
-   - Open your website in Safari
-   - Triple-click the home/power button
-   - Tap "Start" to lock into the app
-
-2. **Prevent Auto-Lock**:
-   - Go to Settings > Display & Brightness > Auto-Lock
-   - Set to "Never"
-
-3. **Keep iPad Charged**:
-   - Keep the iPad plugged in continuously
-   - Consider using a long charging cable for cleaner installation
-
-## How It Works
-
-- Fetches data from TriMet's real-time arrivals API
-- Filters for MAX trains only
-- Displays next 5 arrivals sorted by time
-- Auto-refreshes every 30 seconds
-- Uses browser's Wake Lock API to prevent screen sleep
-- Stores your settings in browser localStorage
-
-## Troubleshooting
-
-**No arrivals showing?**
-- Verify your Stop ID is correct
-- Check that your App ID is valid
-- Make sure the stop serves MAX trains
-
-**Display going to sleep?**
-- Check iPad's Auto-Lock settings
-- Some older iPads may not support Wake Lock API
-
-**API errors?**
-- Ensure you have an active internet connection
-- Verify your TriMet App ID is still valid
-- Check TriMet's service status
-
-## Browser Compatibility
-
-- Safari (recommended for iPad)
-- Chrome
-- Firefox
-- Edge
-
-## Privacy
-
-All settings are stored locally in your browser. No data is sent anywhere except to TriMet's public API for arrival information.
-
-## License
+## 📝 License
 
 MIT License - feel free to modify and use as needed!
+
+## 🎉 Enjoy Your Display!
+
+Once configured, your iPad will show live train arrivals with a beautiful interface. Perfect for knowing exactly when to leave your apartment to catch the MAX!
