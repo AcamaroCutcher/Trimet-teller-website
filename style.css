@@ -183,6 +183,8 @@ button:active {
     font-weight: 700;
     color: #4CAF50;
     text-align: right;
+    font-variant-numeric: tabular-nums;
+    min-width: 150px;
 }
 
 .arrival-time.soon {
