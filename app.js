@@ -353,6 +353,10 @@ function updateArrivalsDisplay() {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
 
+        // Check if train is delayed
+        const isDelayed = arrival.estimated && arrival.scheduled && arrival.estimated > arrival.scheduled;
+        const delayMinutes = isDelayed ? Math.round((arrival.estimated - arrival.scheduled) / 60000) : 0;
+
         const timeClass = minutes <= 1 ? 'now' : (minutes <= 5 ? 'soon' : '');
         let timeText;
 
@@ -366,13 +370,15 @@ function updateArrivalsDisplay() {
             timeText = `${minutes} min`;
         }
 
+        const delayBadge = isDelayed ? `<span class="delay-badge">+${delayMinutes} min</span>` : '';
+
         return `
-            <div class="arrival-item">
+            <div class="arrival-item ${isDelayed ? 'delayed' : ''}">
                 <div class="arrival-info">
                     <span class="route-number">${arrival.shortSign || arrival.route}</span>
-                    <div class="route-name">${arrival.fullSign || arrival.desc || 'MAX Train'}</div>
+                    <div class="route-name">${arrival.fullSign || arrival.desc || 'MAX Train'}${delayBadge}</div>
                 </div>
-                <div class="arrival-time ${timeClass}" data-index="${index}">${timeText}</div>
+                <div class="arrival-time ${timeClass}" data-index="${index}" data-delayed="${isDelayed}">${timeText}</div>
             </div>
         `;
     }).join('');
@@ -387,6 +393,9 @@ function updateCountdowns() {
         const seconds = calculateSeconds(arrivalTime);
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
+
+        // Check if train is delayed
+        const isDelayed = arrival.estimated && arrival.scheduled && arrival.estimated > arrival.scheduled;
 
         const timeClass = minutes <= 1 ? 'now' : (minutes <= 5 ? 'soon' : '');
         let timeText;
@@ -403,6 +412,7 @@ function updateCountdowns() {
 
         timeElement.textContent = timeText;
         timeElement.className = `arrival-time ${timeClass}`;
+        timeElement.setAttribute('data-delayed', isDelayed);
     });
 }
 
