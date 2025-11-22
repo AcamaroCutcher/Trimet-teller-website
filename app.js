@@ -299,27 +299,8 @@ function displayArrivals(resultSet) {
     console.log(`📊 Total arrivals received: ${resultSet.arrival.length}`);
     console.log('🔍 All arrivals:', resultSet.arrival);
 
-    // Filter for MAX trains only and sort by estimated time
-    // TriMet MAX route IDs: 90 (Red), 100 (Blue), 190 (Yellow), 200 (Green), 290 (Orange)
-    const MAX_ROUTE_IDS = [90, 100, 190, 200, 290];
-
+    // Show ALL trains at this stop (MAX trains and buses)
     currentArrivals = resultSet.arrival
-        .filter(a => {
-            // Check if route ID is a MAX line
-            const routeId = parseInt(a.route);
-            const isMaxById = MAX_ROUTE_IDS.includes(routeId);
-
-            // Also check if shortSign, fullSign, or desc contains "MAX"
-            const hasMaxInName = (
-                (a.shortSign && a.shortSign.toUpperCase().includes('MAX')) ||
-                (a.fullSign && a.fullSign.toUpperCase().includes('MAX')) ||
-                (a.desc && a.desc.toUpperCase().includes('MAX'))
-            );
-
-            const isMax = isMaxById || hasMaxInName;
-            console.log(`Route ${a.route} (${a.shortSign || a.desc}): ${isMax ? '✅ MAX' : '❌ Not MAX'}`);
-            return isMax;
-        })
         .sort((a, b) => {
             const timeA = a.estimated || a.scheduled;
             const timeB = b.estimated || b.scheduled;
@@ -327,10 +308,10 @@ function displayArrivals(resultSet) {
         })
         .slice(0, 5); // Show next 5 arrivals
 
-    console.log(`🚊 MAX arrivals found: ${currentArrivals.length}`, currentArrivals);
+    console.log(`🚊 Arrivals found: ${currentArrivals.length}`, currentArrivals);
 
     if (currentArrivals.length === 0) {
-        arrivalsDiv.innerHTML = '<div class="loading">No MAX trains scheduled</div>';
+        arrivalsDiv.innerHTML = '<div class="loading">No upcoming arrivals</div>';
         updateLastUpdateTime();
         return;
     }
