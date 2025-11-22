@@ -124,6 +124,35 @@ header {
     text-transform: capitalize;
 }
 
+.weather-advice {
+    font-size: 1.2rem;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.weather-advice.rain {
+    background: rgba(100, 181, 246, 0.25);
+    border-color: rgba(100, 181, 246, 0.5);
+    color: #81d4fa;
+}
+
+.weather-advice.cold {
+    background: rgba(144, 202, 249, 0.25);
+    border-color: rgba(144, 202, 249, 0.5);
+    color: #90caf9;
+}
+
+.weather-advice.warm {
+    background: rgba(255, 183, 77, 0.25);
+    border-color: rgba(255, 183, 77, 0.5);
+    color: #ffb74d;
+}
+
 header h1 {
     font-size: 4rem;
     font-weight: 800;

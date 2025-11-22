@@ -54,7 +54,8 @@ async function initializeWeather() {
             if (data.main && data.weather) {
                 const temp = Math.round(data.main.temp);
                 const desc = data.weather[0].description;
-                updateWeather(temp, desc);
+                const weatherId = data.weather[0].id;
+                updateWeather(temp, desc, weatherId);
                 console.log('✅ Weather loaded from OpenWeatherMap');
                 return;
             }
@@ -69,7 +70,7 @@ async function initializeWeather() {
             const temp = Math.round(data.current.temperature_2m);
             const weatherCode = data.current.weather_code;
             const desc = getWeatherDescription(weatherCode);
-            updateWeather(temp, desc);
+            updateWeather(temp, desc, weatherCode);
             console.log('✅ Weather loaded from Open-Meteo');
         }
     } catch (error) {
@@ -103,9 +104,58 @@ function getWeatherDescription(code) {
     return weatherCodes[code] || 'Portland';
 }
 
-function updateWeather(temp, description) {
+function updateWeather(temp, description, weatherCode = null) {
     document.querySelector('.weather-temp').textContent = `${temp}°`;
     document.querySelector('.weather-desc').textContent = description;
+
+    // Determine if it's raining and if user needs a jacket
+    if (temp === '--') {
+        document.getElementById('weatherAdvice').textContent = '';
+        return;
+    }
+
+    const tempNum = parseInt(temp);
+    let advice = '';
+    let adviceClass = '';
+
+    // Check if it's raining (weather codes for rain/drizzle/showers)
+    // Open-Meteo codes: 51, 53, 55 (drizzle), 61, 63, 65 (rain), 80, 81, 82 (showers)
+    // OpenWeatherMap codes: 200-599 (rain/drizzle/thunderstorm)
+    const rainCodes = [51, 53, 55, 61, 63, 65, 80, 81, 82, 95];
+    const isRaining = weatherCode && (
+        rainCodes.includes(weatherCode) ||
+        (weatherCode >= 200 && weatherCode < 600)
+    );
+
+    if (isRaining) {
+        advice = '☔ Rain! Bring umbrella';
+        adviceClass = 'rain';
+    }
+
+    // Jacket recommendations based on temperature
+    if (tempNum <= 50) {
+        if (advice) advice += ' + ';
+        advice += '🧥 Wear a jacket';
+        adviceClass = adviceClass || 'cold';
+    } else if (tempNum <= 60) {
+        if (advice) advice += ' + ';
+        advice += '🧥 Light jacket recommended';
+        adviceClass = adviceClass || 'cold';
+    } else if (tempNum >= 75) {
+        if (!advice) {
+            advice = '☀️ No jacket needed';
+            adviceClass = 'warm';
+        }
+    }
+
+    const adviceEl = document.getElementById('weatherAdvice');
+    if (advice) {
+        adviceEl.textContent = advice;
+        adviceEl.className = `weather-advice ${adviceClass}`;
+    } else {
+        adviceEl.textContent = '✨ Perfect weather';
+        adviceEl.className = 'weather-advice';
+    }
 }
 
 function loadSettings() {
