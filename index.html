@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TriMet MAX Arrivals</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚊 TriMet MAX Arrivals</h1>
+        </header>
+
+        <div class="config-section" id="configSection">
+            <div class="input-group">
+                <label for="stopId">Stop ID:</label>
+                <input type="text" id="stopId" placeholder="Enter Stop ID (e.g., 8371)">
+            </div>
+            <div class="input-group">
+                <label for="appId">TriMet App ID:</label>
+                <input type="text" id="appId" placeholder="Enter your TriMet API App ID">
+            </div>
+            <button id="saveBtn" onclick="saveSettings()">Save & Start</button>
+            <p class="help-text">
+                Get your free API App ID at <a href="https://developer.trimet.org/" target="_blank">developer.trimet.org</a><br>
+                Find your Stop ID on the TriMet website or at your stop
+            </p>
+        </div>
+
+        <div class="arrivals-section" id="arrivalsSection" style="display: none;">
+            <div class="stop-info">
+                <h2 id="stopName">Loading...</h2>
+                <button class="settings-btn" onclick="showSettings()">⚙️ Settings</button>
+            </div>
+
+            <div id="arrivals" class="arrivals-list">
+                <div class="loading">Loading arrivals...</div>
+            </div>
+
+            <div class="last-update">
+                Last updated: <span id="lastUpdate">--:--</span>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

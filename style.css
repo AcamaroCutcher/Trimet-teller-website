@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.config-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 20px;
+    font-size: 1.8rem;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+button {
+    width: 100%;
+    padding: 25px;
+    font-size: 2rem;
+    font-weight: 700;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.help-text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.help-text a {
+    color: #90caf9;
+    text-decoration: none;
+}
+
+.stop-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.stop-info h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.settings-btn {
+    width: auto;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0;
+}
+
+.arrivals-list {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    min-height: 400px;
+}
+
+.arrival-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.arrival-item:hover {
+    transform: translateX(5px);
+}
+
+.arrival-info {
+    flex: 1;
+}
+
+.route-number {
+    display: inline-block;
+    background: #FF6B35;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.route-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.arrival-time {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #4CAF50;
+    text-align: right;
+}
+
+.arrival-time.soon {
+    color: #FFC107;
+}
+
+.arrival-time.now {
+    color: #FF5252;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.loading {
+    text-align: center;
+    font-size: 2rem;
+    padding: 60px;
+    opacity: 0.7;
+}
+
+.last-update {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1.4rem;
+    opacity: 0.7;
+}
+
+.error-message {
+    background: rgba(255, 82, 82, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 20px;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    .route-number {
+        font-size: 1.5rem;
+    }
+
+    .route-name {
+        font-size: 1.4rem;
+    }
+
+    .arrival-time {
+        font-size: 3rem;
+    }
+}
