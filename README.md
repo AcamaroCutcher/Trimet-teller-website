@@ -169,7 +169,10 @@ The container:
 
 ## 💡 Tips
 
-- The app automatically filters for MAX trains only
+- The app shows ALL transit at the stop (buses and MAX trains)
+- MAX lines are color-coded: Blue (100), Red (90), Green (200), Orange (290), Yellow (190)
+- Shows both countdown timer AND scheduled arrival time
+- Delay detection shows if trains are running late or early
 - Countdown shows MM:SS format for trains <10 minutes away
 - Countdown shows seconds only for trains <2 minutes away
 - The display works great on iPads 9.7" and larger

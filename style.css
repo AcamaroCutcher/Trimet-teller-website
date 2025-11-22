@@ -346,6 +346,33 @@ button:active {
     box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
 }
 
+/* MAX Line Colors */
+.route-number.blue-line {
+    background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.5);
+}
+
+.route-number.red-line {
+    background: linear-gradient(135deg, #D31145 0%, #A80D36 100%);
+    box-shadow: 0 4px 15px rgba(211, 17, 69, 0.5);
+}
+
+.route-number.green-line {
+    background: linear-gradient(135deg, #008852 0%, #006B41 100%);
+    box-shadow: 0 4px 15px rgba(0, 136, 82, 0.5);
+}
+
+.route-number.orange-line {
+    background: linear-gradient(135deg, #D66000 0%, #B35200 100%);
+    box-shadow: 0 4px 15px rgba(214, 96, 0, 0.5);
+}
+
+.route-number.yellow-line {
+    background: linear-gradient(135deg, #FFC425 0%, #E6B022 100%);
+    box-shadow: 0 4px 15px rgba(255, 196, 37, 0.5);
+    color: #1a1a1a;
+}
+
 .route-name {
     font-size: 1.1rem;
     font-weight: 600;
@@ -354,6 +381,13 @@ button:active {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.scheduled-time {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: 2px;
+    font-weight: 500;
 }
 
 .delay-badge {

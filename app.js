@@ -310,6 +310,17 @@ function displayArrivals(resultSet) {
 
     console.log(`🚊 Arrivals found: ${currentArrivals.length}`, currentArrivals);
 
+    // Debug delay information
+    currentArrivals.forEach(arrival => {
+        if (arrival.estimated && arrival.scheduled) {
+            const delayMs = arrival.estimated - arrival.scheduled;
+            const delayMin = Math.round(delayMs / 60000);
+            console.log(`🚦 Route ${arrival.route}: Scheduled=${new Date(arrival.scheduled).toLocaleTimeString()}, Estimated=${new Date(arrival.estimated).toLocaleTimeString()}, Delay=${delayMin}min`);
+        } else {
+            console.log(`✅ Route ${arrival.route}: On time (no estimated time)`);
+        }
+    });
+
     if (currentArrivals.length === 0) {
         arrivalsDiv.innerHTML = '<div class="loading">No upcoming arrivals</div>';
         updateLastUpdateTime();
@@ -319,6 +330,27 @@ function displayArrivals(resultSet) {
     // Display arrivals with countdown
     updateArrivalsDisplay();
     updateLastUpdateTime();
+}
+
+function getRouteColorClass(route) {
+    const routeId = parseInt(route);
+    const colorMap = {
+        90: 'red-line',      // MAX Red Line
+        100: 'blue-line',    // MAX Blue Line
+        190: 'yellow-line',  // MAX Yellow Line
+        200: 'green-line',   // MAX Green Line
+        290: 'orange-line'   // MAX Orange Line
+    };
+    return colorMap[routeId] || '';
+}
+
+function formatArrivalTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
 }
 
 function updateArrivalsDisplay() {
@@ -334,9 +366,22 @@ function updateArrivalsDisplay() {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
 
-        // Check if train is delayed
-        const isDelayed = arrival.estimated && arrival.scheduled && arrival.estimated > arrival.scheduled;
-        const delayMinutes = isDelayed ? Math.round((arrival.estimated - arrival.scheduled) / 60000) : 0;
+        // Check if train is delayed or early
+        let isDelayed = false;
+        let delayMinutes = 0;
+        let delayBadge = '';
+
+        if (arrival.estimated && arrival.scheduled) {
+            const delayMs = arrival.estimated - arrival.scheduled;
+            delayMinutes = Math.round(delayMs / 60000);
+
+            if (delayMinutes > 0) {
+                isDelayed = true;
+                delayBadge = `<span class="delay-badge">+${delayMinutes} min late</span>`;
+            } else if (delayMinutes < 0) {
+                delayBadge = `<span class="delay-badge" style="background: rgba(76, 175, 80, 0.3); color: #4CAF50; border-color: rgba(76, 175, 80, 0.5);">${Math.abs(delayMinutes)} min early</span>`;
+            }
+        }
 
         const timeClass = minutes <= 1 ? 'now' : (minutes <= 5 ? 'soon' : '');
         let timeText;
@@ -351,13 +396,15 @@ function updateArrivalsDisplay() {
             timeText = `${minutes} min`;
         }
 
-        const delayBadge = isDelayed ? `<span class="delay-badge">+${delayMinutes} min</span>` : '';
+        const routeColorClass = getRouteColorClass(arrival.route);
+        const scheduledTimeText = formatArrivalTime(arrivalTime);
 
         return `
             <div class="arrival-item ${isDelayed ? 'delayed' : ''}">
                 <div class="arrival-info">
-                    <span class="route-number">${arrival.shortSign || arrival.route}</span>
+                    <span class="route-number ${routeColorClass}">${arrival.shortSign || arrival.route}</span>
                     <div class="route-name">${arrival.fullSign || arrival.desc || 'MAX Train'}${delayBadge}</div>
+                    <div class="scheduled-time">Scheduled: ${scheduledTimeText}</div>
                 </div>
                 <div class="arrival-time ${timeClass}" data-index="${index}" data-delayed="${isDelayed}">${timeText}</div>
             </div>
