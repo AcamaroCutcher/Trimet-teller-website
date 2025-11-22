@@ -1,6 +1,6 @@
 # TriMet MAX Arrival Display
 
-A clean, iPad-optimized web application for displaying real-time TriMet MAX train arrivals. Perfect for wall-mounted displays.
+A clean, iPad-optimized web application for displaying real-time TriMet MAX train arrivals at **1615 SW Morrison St, Portland, OR 97205**. Perfect for wall-mounted displays.
 
 ## Features
 
@@ -20,13 +20,15 @@ A clean, iPad-optimized web application for displaying real-time TriMet MAX trai
 2. Register for a free account
 3. Create a new application to get your App ID
 
-### 2. Find Your Stop ID
+### 2. Your Stop Information
 
-You can find your stop ID in several ways:
-- Check the TriMet website at your stop location
-- Look at the stop's sign or pole (often printed there)
-- Use the TriMet trip planner and note the stop number
-- Example: Stop ID `8371` is SW 5th & Oak St
+**Providence Park MAX Station** (1 minute walk from 1615 SW Morrison St)
+
+The application is pre-configured with two platform options:
+- **Stop ID 9758** - Eastbound platform (towards City Center/Gresham)
+- **Stop ID 9757** - Westbound platform (towards Hillsboro/Beaverton)
+
+Simply select your preferred direction when setting up the app.
 
 ### 3. Run Locally
 

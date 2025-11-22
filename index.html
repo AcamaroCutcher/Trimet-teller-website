@@ -10,12 +10,16 @@
     <div class="container">
         <header>
             <h1>🚊 TriMet MAX Arrivals</h1>
+            <p class="address">1615 SW Morrison St, Portland, OR 97205</p>
         </header>
 
         <div class="config-section" id="configSection">
             <div class="input-group">
-                <label for="stopId">Stop ID:</label>
-                <input type="text" id="stopId" placeholder="Enter Stop ID (e.g., 8371)">
+                <label for="stopId">Providence Park MAX Station:</label>
+                <select id="stopId">
+                    <option value="9758">Eastbound (to City Center/Gresham)</option>
+                    <option value="9757">Westbound (to Hillsboro/Beaverton)</option>
+                </select>
             </div>
             <div class="input-group">
                 <label for="appId">TriMet App ID:</label>
@@ -24,7 +28,7 @@
             <button id="saveBtn" onclick="saveSettings()">Save & Start</button>
             <p class="help-text">
                 Get your free API App ID at <a href="https://developer.trimet.org/" target="_blank">developer.trimet.org</a><br>
-                Find your Stop ID on the TriMet website or at your stop
+                Providence Park MAX Station is located at SW 17th & Morrison (1 min walk)
             </p>
         </div>
 
