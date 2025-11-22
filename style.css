@@ -9,7 +9,7 @@ body {
     background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     color: #ffffff;
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
     -webkit-font-smoothing: antialiased;
     position: relative;
     overflow-x: hidden;
@@ -65,11 +65,11 @@ body::before {
 
 header {
     text-align: center;
-    margin-bottom: 30px;
-    padding: 30px;
+    margin-bottom: 12px;
+    padding: 15px 20px;
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(20px);
-    border-radius: 25px;
+    border-radius: 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
@@ -78,8 +78,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 25px;
-    gap: 20px;
+    margin-bottom: 10px;
+    gap: 15px;
 }
 
 .datetime-weather {
@@ -88,7 +88,7 @@ header {
 }
 
 .current-time {
-    font-size: 3.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: #90caf9;
     text-shadow: 0 0 20px rgba(144, 202, 249, 0.5);
@@ -97,8 +97,8 @@ header {
 }
 
 .current-date {
-    font-size: 1.4rem;
-    margin-top: 8px;
+    font-size: 1rem;
+    margin-top: 4px;
     opacity: 0.8;
     font-weight: 500;
 }
@@ -109,7 +109,7 @@ header {
 }
 
 .weather-temp {
-    font-size: 3.5rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: #ffb74d;
     text-shadow: 0 0 20px rgba(255, 183, 77, 0.5);
@@ -117,18 +117,18 @@ header {
 }
 
 .weather-desc {
-    font-size: 1.4rem;
-    margin-top: 8px;
+    font-size: 1rem;
+    margin-top: 4px;
     opacity: 0.8;
     font-weight: 500;
     text-transform: capitalize;
 }
 
 .weather-advice {
-    font-size: 1.2rem;
-    margin-top: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-weight: 600;
     display: inline-block;
     background: rgba(255, 255, 255, 0.15);
@@ -153,33 +153,31 @@ header {
     color: #ffb74d;
 }
 
-header h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, #90caf9 0%, #42a5f5 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-header .address {
-    font-size: 1.8rem;
+.location-info {
+    font-size: 1.2rem;
+    font-weight: 600;
     opacity: 0.95;
-    font-weight: 500;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.direction-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
-    padding: 12px 30px;
-    border-radius: 25px;
+.location-info .icon {
     font-size: 1.4rem;
+}
+
+.location-info .address {
+    color: #90caf9;
+}
+
+.location-info .direction {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.95rem;
     font-weight: 700;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
 }
 
 .config-section {
@@ -277,8 +275,8 @@ button:active {
 .arrivals-section {
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
-    border-radius: 25px;
-    padding: 30px;
+    border-radius: 15px;
+    padding: 15px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
@@ -287,13 +285,13 @@ button:active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #90caf9;
     text-shadow: 0 0 20px rgba(144, 202, 249, 0.3);
@@ -301,22 +299,22 @@ button:active {
 
 .settings-btn {
     width: auto;
-    padding: 15px 25px;
-    font-size: 1.8rem;
+    padding: 8px 15px;
+    font-size: 1.2rem;
     background: rgba(255, 255, 255, 0.1);
     margin: 0;
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .arrivals-list {
-    min-height: 300px;
+    min-height: 200px;
 }
 
 .arrival-item {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 20px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -339,28 +337,28 @@ button:active {
     display: inline-block;
     background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
     color: white;
-    padding: 12px 25px;
-    border-radius: 12px;
-    font-size: 2.2rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 1.3rem;
     font-weight: 800;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
 }
 
 .route-name {
-    font-size: 1.9rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
     opacity: 0.95;
 }
 
 .arrival-time {
-    font-size: 4.5rem;
+    font-size: 2.8rem;
     font-weight: 800;
     color: #4CAF50;
     text-align: right;
     font-variant-numeric: tabular-nums;
-    min-width: 180px;
+    min-width: 110px;
     text-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
 }
 
@@ -388,17 +386,17 @@ button:active {
 
 .loading {
     text-align: center;
-    font-size: 2rem;
-    padding: 60px;
+    font-size: 1.3rem;
+    padding: 40px;
     opacity: 0.7;
 }
 
 .last-update {
     text-align: center;
-    margin-top: 25px;
-    padding-top: 20px;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 2px solid rgba(255, 255, 255, 0.1);
-    font-size: 1.3rem;
+    font-size: 0.9rem;
     opacity: 0.6;
 }
 
